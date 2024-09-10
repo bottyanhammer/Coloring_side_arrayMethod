@@ -31,7 +31,7 @@ const makeBoxes = () => {
     return content;
 }
 
-// A négyzetek megjelenítése a html-ben:
+// A négyzetek megjelenítése a html-ben  - mellékhatás:
 const renderBoxes = () => {
     const boxesContainer = document.querySelector(".boxes");
     boxesContainer.innerHTML = "";
@@ -82,7 +82,7 @@ const createRGBColor = () => {
     return [ r, g, b ];
 };
 
-// Színezés végrehajtása:
+// Színezés végrehajtása - mellékhatás:
 const coloringBox = () => {
     const [ isValid, number ] = checkValue();
     if (!isValid) {
@@ -94,11 +94,11 @@ const coloringBox = () => {
     const [ r, g, b ] = createRGBColor();
     box.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
 };
-
+// Hibaüzenetet küldő eljárás - mellékhatás
 function sendErrorMessage() {
     alert("Helytelen értéket adott meg!");
 };
-
+// Input mező tartalmának törlése, és a fókusz ráhelyezése:
 function clearInput() {
     const inputElement = document.querySelector("#num");
     inputElement.value = "";
@@ -113,7 +113,7 @@ const coloring = () => {
         clearInput();
     });    
 };
-
+// Töröl-gomb működtetése:
 const reset = () => {
     const resetButton = document.querySelector(".card button:nth-child(4)");
     resetButton.addEventListener("click", () => {
