@@ -26,7 +26,8 @@ const makeBoxes = () => {
         {number: 14},
         {number: 15}
     ];
-    const content = data.map( ({ number })  => `<div id="${number}" class="box">${number}</div>` );
+    // const content = data.map( ({ number })  => `<div id="${number}" class="box">${number}</div>` );
+    const content = data.map( element  => `<div id="${element.number}" class="box">${element["number"]}</div>` );
     return content;
 }
 
@@ -48,16 +49,85 @@ const renderBoxes = () => {
 //const boxes = document.querySelectorAll(".box"); 
 //console.log("Boxlista1: ", boxes); // log
 
+// Tennivalók:
+// 1. Kivenni az input mező értékét
+const getInputValue = function() {
+    return document.querySelector("#num").value;
+};
+// 2. Megfelelő-e az érték (nem üres, nem szting, 1 és 15 között van)
+const checkValue = () => {
+    const value = getInputValue();
+    if (!value.trim()) {
+        return [false, 0];
+    }
+    if (isNaN(value)) {     // TODO
+        return [false, 0];
+    }
+    const currentValue = Number(value);
+    if (currentValue < 1 || currentValue > 15) {
+        return [false, 0];
+    }
+    return [true, currentValue];
+}
+
+// 4. Véletlen szám-generátor
+const randomNumber = () => {
+    return Math.floor(Math.random() * 256);
+}
+// 5. Számokból színt készíteni
+const createRGBColor = () => {
+    const r = randomNumber();
+    const g = randomNumber();
+    const b = randomNumber();
+    return [ r, g, b ];
+};
+
+// Színezés végrehajtása:
+const coloringBox = () => {
+    const [ isValid, number ] = checkValue();
+    if (!isValid) {
+        sendErrorMessage();
+        return;
+    }
+    const boxes = document.querySelectorAll(".box");
+    const box = Array.from(boxes).find(b => Number(b.id) === number);
+    const [ r, g, b ] = createRGBColor();
+    box.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+};
+
+function sendErrorMessage() {
+    alert("Helytelen értéket adott meg!");
+};
+
+function clearInput() {
+    const inputElement = document.querySelector("#num");
+    inputElement.value = "";
+    inputElement.focus();
+}
+
+// Színező gomb működtetése:
+const coloring = () => {
+    const button = document.querySelector(".card button:nth-child(3)");
+    button.addEventListener("click", () => {
+        coloringBox();
+        clearInput();
+    });    
+};
+
+const reset = () => {
+    const resetButton = document.querySelector(".card button:nth-child(4)");
+    resetButton.addEventListener("click", () => {
+        renderBoxes();
+        clearInput();
+    })
+}
+
+// Az oldal inicializálása - dinamikus tartalom feltöltése:
 document.addEventListener("DOMContentLoaded", () => {
     renderBoxes();
+    coloring();
+    reset();
     const boxes = document.querySelectorAll(".box"); 
     console.log("Boxlista3: ", boxes); // log
 });
 
-// Tennivalók:
-// 1. Kivenni az input mező értékét
-// 2. Megfelelő-e az érték (nem üres, nem szting, 1 és 15 között van)
-// 3. A színező gombra eseményfigyelőt helyezni - színező callback-eljárás
-// 4. Véletlen szám-generátor
-// 5. Számokból színt készíteni
-// 6. 3. feladat színező eljárásában alkalmazni ezt a színt.
